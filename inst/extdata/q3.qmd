@@ -1,0 +1,14 @@
+---
+title: "q3"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+---
+
+Humpty-Dumpty sat on a wall. Humpty-Dunpty had a great fall. 
+
+```{r}
+1 + 1
+```
+

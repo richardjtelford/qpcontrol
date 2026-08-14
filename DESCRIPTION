@@ -1,0 +1,23 @@
+Package: qpcontrol
+Type: Package
+Title: Check quarto documents for plagiarism
+Version: 0.1.0
+Authors@R: 
+    person(
+      given = c("Richard", "James"), 
+      family = "Telford",
+      email = "richard.telford@uib.no",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "https://orcid.org/0000-0001-9826-3076")
+    )
+Description: Extracts the code fron rendered quarto files and runs pairwise
+  comparisons to detect code with unexpected similarity.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    purrr,
+    rvest,
+    stringr,
+    textreuse
+Config/roxygen2/version: 8.1.0
