@@ -16,6 +16,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    diffr,
     purrr,
     rvest,
     stringr,
@@ -23,3 +24,5 @@ Imports:
 Config/roxygen2/version: 8.1.0
 URL: https://github.com/richardjtelford/qpcontrol
 BugReports: https://github.com/richardjtelford/qpcontrol/issues
+Depends: 
+    R (>= 4.1)

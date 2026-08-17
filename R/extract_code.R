@@ -12,14 +12,13 @@
 
 
 qp_extract <- function(html_dir, txt_dir) {
-  files <- list.files(html_dir, pattern = "\\.html$")
+  files <- list.files(html_dir, pattern = "\\.html$", full.names = TRUE)
   files |> walk(\(f) {
     out <- str_replace(basename(f), pattern = "\\.html$", replacement = ".qmd")
     qp_extract_file(f) |>
-      writeLines(file = file.path(txt_dir, out))})
-
+      writeLines(con = file.path(txt_dir, out))
+  })
 }
-
 
 
 #' Extract code a quarto file
@@ -33,7 +32,7 @@ qp_extract <- function(html_dir, txt_dir) {
 
 
 qp_extract_file <- function(file) {
-   read_html(file) |>
+  read_html(file) |>
     html_element("pre.sourceCode.markdown.code-with-copy") |>
     html_text2()
 }
