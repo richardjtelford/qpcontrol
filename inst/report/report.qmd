@@ -1,0 +1,121 @@
+---
+title: Report on quarto submissions with unexpectedly similar texts
+date: today
+format:
+  html:
+    embed-resources: true
+    code-tools: true
+    code-fold: true
+params:
+  html_dir: ""
+  threshold: 0.7
+execute:
+  echo: true
+
+---
+
+```{r}
+#| label: setup
+#| code-summary: Code - Load package
+library(qpcontrol)
+```
+
+
+- extract qmd
+- report any submitted only as qmd (rendering problems??)
+- report empty files (text reuse would do this, but awkward in flow)
+- plot dendrogram with threshold
+- iterate through pairs of documents with dissimilarity < threshold
+
+
+
+```{r}
+#| label: extract
+#| code-summary: Code - Extract qmd
+
+# directory to store the files
+tmp <- tempdir()
+txt_path <- file.path(tmp, "txt")
+fs::dir_create(txt_path)
+
+# extract qmd from html files
+qp_extract(html_dir = params$html_dir, txt_dir = txt_path)
+```
+
+Possible problems at this stage include: students submitting the qmd file rather than the html file, not using code-tool argument, having some formatting error that prevents code-tools from functioning properly. 
+
+Next version of this package will try to address these problems.
+
+Now we can use `qp_pairwise()` to convert each document to overlapping n-grams and find the Jaccard similarity between pairs of documents.
+This function is a wrapper for the `textreuse` package.
+
+```{r}
+#| label: calculate-distances
+#| code-summary: Code - Calculate distances
+txt_distances <- qp_pairwise(txt_dir = txt_path)
+attr(txt_distances, "skipped")
+```
+
+This result is a distance matrix which can be clusters with `hclust()`.
+Pairs of submissions with unexpectedly low dissimilarity need to be checked for possible plagiarism.
+
+```{r}
+#| label: fig-distances
+#| code-summary: Code - Plot distances
+h_single <- t(txt_distances) |>
+  as.dist() |>
+  hclust(method = "single") 
+h_single |>
+  plot(labels = 1:nrow(txt_distances))
+abline(h = params$threshold, lty = 2, col = 2)
+```
+
+### outliers
+
+```{r}
+#| label: most-unique
+cut <- h_single |> 
+  cutree(k = 2)
+names(cut)[cut == which.min(table(cut))]
+```
+
+
+
+Possible pairs can be identified with `which()`
+
+```{r}
+#| label: distances-gt-thresh
+#| code-summary: Code - Find distances below threshold
+results <- qp_which(txt_distances, params$threshold)
+results
+```
+
+
+The `qp_diffr()` function uses the `diffr` package to compare texts.
+
+
+```{r}
+#| label: show-differences
+#| code-summary: Code - Show first pair
+#| output: asis
+if (nrow(results) > 0) {
+  cat(paste("# Case 1"))
+  qp_diffr(results[1, ], txt_dir = txt_path)
+}
+```
+
+Check for overlap because assignment text is repeated.
+
+
+```{r}
+#| label: show-more-differences
+#| code-summary: Code - Show remaining pairs
+#| output: asis
+if (nrow(results) > 1) {
+  for (i in 2:nrow(results)) {
+    cat(paste("\n# Case ", i, "\n"))
+    qp_diffr(results[i, ], txt_dir = txt_path) |> print()
+  }
+}
+```
+
