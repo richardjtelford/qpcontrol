@@ -7,7 +7,7 @@
 qp_extract(html_dir, txt_dir)
 }
 \arguments{
-\item{html_dir}{Directory with html files}
+\item{html_dir}{Directory with html files or path to zip file.}
 
 \item{txt_dir}{Directory to fill with extracted code.}
 }

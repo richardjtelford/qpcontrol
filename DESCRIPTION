@@ -17,10 +17,15 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     diffr,
+    dplyr,
+    fs,
     purrr,
+    quarto,
+    rlang,
     rvest,
     stringr,
-    textreuse
+    textreuse,
+    tools
 Config/roxygen2/version: 8.1.0
 URL: https://github.com/richardjtelford/qpcontrol
 BugReports: https://github.com/richardjtelford/qpcontrol/issues

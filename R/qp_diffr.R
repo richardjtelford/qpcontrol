@@ -6,7 +6,7 @@
 #' @export
 
 qp_diffr <- function(result, txt_dir) {
-  file1 <- file.path(txt_dir, paste0(result$row, ".qmd"))
-  file2 <- file.path(txt_dir, paste0(result$col, ".qmd"))
-  diffr(file1 = file1, file2 = file2, before = result$row, after = result$col)
+  file1 <- file.path(txt_dir, paste0(result$file1, ".qmd"))
+  file2 <- file.path(txt_dir, paste0(result$file2, ".qmd"))
+  diffr(file1 = file1, file2 = file2, before = result$file1, after = result$file2)
 }
